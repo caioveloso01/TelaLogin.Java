@@ -1,11 +1,15 @@
 package Login;
 
+
 import java.awt.Font; //Trabalhar com fontes
+import java.awt.HeadlessException;
 import java.awt.SystemColor; //Trabalhar com cores
+import java.awt.event.ActionEvent;
 import javax.swing.JButton; //Trabalhar com botões
 import javax.swing.JFrame;//Trabalhar com frames
 import javax.swing.JLabel;//Trabalhar com labels
 import javax.swing.JPanel;//Trabalhar com paineis
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;//Trabalhar com campos de senha
 import javax.swing.JTextField;//Trabalhar com campos de texto
 
@@ -16,6 +20,15 @@ public class TelaCadastro extends JFrame {
     private final JTextField txtUsuario;
     private final JPasswordField passSenha;
     private final JPasswordField passConfSenha;
+    
+    //Validações de usuário e cadastro corretos
+    private boolean usuarioValido;
+    private boolean cadastroValido;
+    
+    //String de mensagem
+    private String mensagemJOption;
+    private int mensagemTipo = 0;
+    
     
     public TelaCadastro() {
         setLocationRelativeTo(null);
@@ -76,7 +89,73 @@ public class TelaCadastro extends JFrame {
         JButton btnCancelar = new JButton("Cancelar");
         btnCancelar.setBounds(50, 156, 117, 25);
         tela.add(btnCancelar);
-    }
+    
+   
+    //Ação do botão cadastrar usuário na base de dados
+    btnCadastrar.addActionListener((ActionEvent e) -> {
+    try {
+        // Instancio o objeto Usuario
+        Usuario usu = new Usuario();
+
+        // Realizando os setters dos dados de tela
+        usu.setNome(txtNome.getText());
+        usu.setUsuario(txtUsuario.getText());
+        usu.setSenha(passSenha.getText());
+
+        // Validações de preenchimento dos dados
+        if ("".equals(usu.getNome())) {
+            mensagemJOption = "Campo nome do usuário precisa ser informado!";
+            mensagemTipo = 0;
+        } else if ("".equals(usu.getUsuario())) {
+            mensagemJOption = "Campo usuário precisa ser informado!";
+            mensagemTipo = 0;
+        } else if ("".equals(usu.getSenha())) {
+            mensagemJOption = "Campo senha precisa ser informado!";
+            mensagemTipo = 0;
+        } else if(!usu.getSenha().equals(passConfSenha.getText())){
+            mensagemJOption = "Campos senha e confirmação de senha não coincidem!";
+            mensagemTipo = 0;
+        }else{
+            // Verifico se somente o usuário consta no banco,
+            // neste caso, faremos uma sobrecarga de método
+            usuarioValido = usu.verificaUsuario(usu.getUsuario());
+
+            if (usuarioValido) {
+                // Caso exista, não pode ser colocado na base
+                mensagemJOption = "Usuário já existente na base de dados";
+                mensagemTipo = 0;
+            } else {
+                cadastroValido = usu.cadastraUsuario(usu.getNome(),
+                                                     usu.getUsuario(),
+                                                     usu.getSenha());
+                if (cadastroValido) {
+                    // Usuário cadastrado na base de dados
+                    mensagemJOption = "Usuário cadastrado corretamente!";
+                    mensagemTipo = 1;
+                } else {
+                    // Algum erro aconteceu
+                    mensagemJOption = "Problemas ao inserir o usuário!";
+                    mensagemTipo = 0;
+                }
+            }
+        }
+        //Mostrar a mensagem referida
+        JOptionPane.showMessageDialog(null,
+                mensagemJOption, "Atenção", mensagemTipo );
+        if (mensagemTipo == 1){
+            //Voltamos para a tela de login
+            TelaLogin tLogin = new TelaLogin();
+            tLogin.abreTela();
+            
+            //Fecho a tela de cadastro
+            dispose();
+        }
+    }catch (HeadlessException ec) {
+        System.out.println("Erro no cadastro do usuário "
+                + ec.getMessage());
+        }
+    });
+   }
     
    public void abreTela(){
        TelaCadastro panelCadastro = new TelaCadastro();

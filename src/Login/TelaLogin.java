@@ -1,18 +1,23 @@
 package Login;
 
+
+
+
+
+
+
 import java.awt.Font; //Trabalhar com fontes
 import java.awt.SystemColor; //Trabalhar com cores
 import java.awt.event.ActionEvent; //Trabalhar com evento
-import java.awt.event.ActionListener;
 import javax.swing.JButton; //Trabalhar com botões
 import javax.swing.JFrame;//Trabalhar com frames
 import javax.swing.JLabel;//Trabalhar com labels
-import javax.swing.JOptionPane;//Trabalhar com mensagens
+import javax.swing.JOptionPane; //Trabalhar com mensagens
 import javax.swing.JPanel;//Trabalhar com paineis
 import javax.swing.JPasswordField;//Trabalhar com campos de senha
 import javax.swing.JTextField;//Trabalhar com campos de texto
 
-public class TelaLogin extends JFrame{
+public final class TelaLogin extends JFrame{
     
     //tela Objeto JPanel (tela em si)
     private final JPanel panelTela;
@@ -23,7 +28,10 @@ public class TelaLogin extends JFrame{
     //pswSenha Objeto PasswordField (campo na tela)
     private final JPasswordField pswSenha;
     
-    //Método construtor
+    //validar se o usuario é correto
+    private boolean usuarioValido;
+    
+//Método construtor
     public TelaLogin () {
         //coloca o objeto na referencia do centro da tela
         setLocationRelativeTo(null);
@@ -71,6 +79,7 @@ public class TelaLogin extends JFrame{
         
         JLabel lblSenha = new JLabel ("Senha");
         lblSenha.setBounds(24, 92, 70, 15);
+        panelTela.add(lblSenha);
         
         //Identificação e Posicionamento dos texts fields
         txtUsuario = new JTextField();
@@ -87,66 +96,77 @@ public class TelaLogin extends JFrame{
         btnEntrar.setBounds(200, 136, 117, 25);
         panelTela.add(btnEntrar);
         
-        JButton btnCdastrar = new JButton("Cadastrar");
-        btnCdastrar.setBounds(50, 136, 117, 25);
-        panelTela.add(btnCdastrar);
+        JButton btnCadastrar = new JButton("Cadastrar");
+        btnCadastrar.setBounds(50, 136, 117, 25);
+        panelTela.add(btnCadastrar);
         
         //Ação no botão de entrar no sistema
-        btnEntrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Instancio a classe usuario
-                Usuario usu = new Usuario();
+        btnEntrar.addActionListener((ActionEvent e) -> {
+            //Instancio a classe usuario
+            Usuario usu = new Usuario();
+            
+            //Utilizo o setter de usuario e senha
+            usu.setUsuario(txtUsuario.getText());
+            usu.setSenha(pswSenha.getText());
+            
+            if ("".equals(txtUsuario.getText())){
+                //Vamos dar uma mensagem na tela
+                JOptionPane.showMessageDialog(null,
+                        "Campo usuário precisa ser informado!",
+                        "Atenção",
+                        JOptionPane.ERROR_MESSAGE);
+                //Voltar o cursor para o campo txtUsuario
+                txtUsuario.grabFocus();
+            }else if("".equals(pswSenha.getText())) {
                 
-                //Utilizo o setter de usuario e senha
-                usu.setUsuario(txtUsuario.getText());
-                usu.setSenha(pswSenha.getText());
+                //Vamos dar uma mensagem na tela
+                JOptionPane.showMessageDialog(null,
+                        "Campo senha precisa ser informado!",
+                        "Atenção",
+                        JOptionPane.ERROR_MESSAGE);
+                //Voltar o cursor para o campo txtUsuario
+                pswSenha.grabFocus();
+            }else{
+                //Verifico se o usuário consta no banco de dados
+                usuarioValido = usu.verificaUsuario(usu.getUsuario(),
+                        usu.getSenha());
                 
-                if ("".equals(txtUsuario.getText())){
-                    //Vamos dar uma mensagem na tela
+                if (usuarioValido == true){
+                    //Usuario e senha bateram no banco estão corretos
                     JOptionPane.showMessageDialog(null,
-                            "Campo usuário precisa ser informado!",
+                            "Usuário válido em nossa base de dados",
                             "Atenção",
-                            JOptionPane.ERROR_MESSAGE);
-                    //Voltar o cursor para o campo txtUsuario
-                    txtUsuario.grabFocus();
-                }else if("".equals(pswSenha.getText())) {
+                            JOptionPane.INFORMATION_MESSAGE);
+                    TelaInicio telaInicio = new TelaInicio();
+                    telaInicio.abreTela();
                     
-                    //Vamos dar uma mensagem na tela
+                    dispose();                                        
+                
+                }else{
+                    //Usuario e senha bateram no banco estão incorretos
                     JOptionPane.showMessageDialog(null,
-                            "Campo senha precisa ser informado!",
+                            "Usuário inválido ou inexistente",
                             "Atenção",
                             JOptionPane.ERROR_MESSAGE);
-                    //Voltar o cursor para o campo txtUsuario
-                    pswSenha.grabFocus();
-                }else{
-                    //Verifico se o usuário consta no banco de dados
-                    boolean usuarioValido;
-                    usuarioValido = usu.verificaUsuario(usu.getUsuario(),
-                            usu.getSenha());
-                    if (usuarioValido == true){
-                        //Usuario e senha bateram no banco corettos
-                        JOptionPane.showMessageDialog(null,
-                                "Usuário válido em nossa base de dados",
-                                "Atenção",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }else{
-                        //Usuario e senha bateram no banco estão incorretos
-                        JOptionPane.showMessageDialog(null,
-                                "Usuário inválido ou inexistente",
-                                "Atenção",
-                                JOptionPane.ERROR_MESSAGE);
-                        //Método para limpar os texto
-                        limpaText();
-                        
-                        //Mando o foco para o campo usuário
-                        txtUsuario.grabFocus();
-                    }
+                    
+                    //Método para limpar os texto
+                    limpaText();
+                    
+                    //Mando o foco para o campo usuário
+                    txtUsuario.grabFocus();
                 }
             }
+        });           
+        
+        btnCadastrar.addActionListener((ActionEvent e) -> {
+        //Instancio a classe TelaCadastro
+        TelaCadastro tCadastro = new TelaCadastro();
+        tCadastro.abreTela();
+        dispose();
         });
     }
-
+    
+    
     public void abreTela(){
         TelaLogin tela = new TelaLogin();
         tela.setVisible(true);
@@ -156,4 +176,5 @@ public class TelaLogin extends JFrame{
         txtUsuario.setText("");
         pswSenha.setText("");
     }
+
 }
