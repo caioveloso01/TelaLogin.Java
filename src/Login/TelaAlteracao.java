@@ -156,6 +156,7 @@ public class TelaAlteracao extends JFrame{
                                         + "a tela de login.",
                                 "Atenção",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        
                         //Abrimos a tela de login novamente        
                         TelaLogin tLogin = new TelaLogin();
                         tLogin.abreTela();

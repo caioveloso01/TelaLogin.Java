@@ -55,11 +55,12 @@ public class Usuario{
             //Criando parâmetro de retorno
             banco.stmt=banco.con.createStatement();
             
+            
             //Executando a consulta no banco de dados
             banco.resultset =
                     banco.stmt.executeQuery("SELECT * FROM usuario " 
-                                          + "WHERE apelido = '" + usuario + "'"
-                                          + " AND senha = '" + senha + "'");
+                                          + "WHERE usuario = '" + usuario + "'"
+                                          + " AND senha = md5('" + senha + "')");
             //Verificando se existe retorno de dados no banco
             if (banco.resultset.next()){
                 //Caso tenha
