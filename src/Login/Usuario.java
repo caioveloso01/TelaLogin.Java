@@ -1,6 +1,11 @@
+
 package Login;
 
 import java.sql.SQLException; //Tratar as exceções no banco de dados
+
+
+
+
 
 public class Usuario{
     //Criação dos atributos privados da classe
@@ -55,12 +60,12 @@ public class Usuario{
             //Criando parâmetro de retorno
             banco.stmt=banco.con.createStatement();
             
-            
             //Executando a consulta no banco de dados
             banco.resultset =
                     banco.stmt.executeQuery("SELECT * FROM usuario " 
                                           + "WHERE usuario = '" + usuario + "'"
                                           + " AND senha = md5('" + senha + "')");
+            
             //Verificando se existe retorno de dados no banco
             if (banco.resultset.next()){
                 //Caso tenha
@@ -69,12 +74,13 @@ public class Usuario{
                 //Setters em Nome e Usuario
                 setUsuario (banco.resultset.getString(1));
                 setNome (banco.resultset.getString(2));
+
                 //Nos atributos estáticos, realizo as atribuições
                 nomeUsuario = getNome();
                 usuarioSistema = getUsuario();
             }else{
-            //Caso não tenha
-            resultUsuario = false;
+                //Caso não tenha
+                resultUsuario = false;
             }
         
             banco.fecharConexao(); // fecha nossa conexão com o banco de dados
@@ -113,7 +119,7 @@ public class Usuario{
                 resultUsuario = false;
             }
             
-            banco.fecharConexao();
+            banco.fecharConexao();// fecha nossa conexão com o banco de dados
         
         }catch (SQLException ec) {
             System.out.println("Erro ao consultar usuário " + ec.getMessage());
@@ -163,9 +169,9 @@ public class Usuario{
             banco.stmt = banco.con.createStatement();
             
             //Executando a alteração no banco de dados
-            banco.stmt.execute("UPDATE usuario SET nome = '" + nome +
-                               "', senha = '" + senha + "' WHERE usuario = '" +
-                                usuario + "'");
+            banco.stmt.execute("UPDATE usuario SET nome = '" + nome + 
+                   "', senha = md5('" + senha + "') WHERE usuario = '" +
+                   usuario + "'");
         }catch (SQLException ec){
             System.out.println("Erro ao atualizar usuário " + ec.getMessage());
             resultAlteracao = false;

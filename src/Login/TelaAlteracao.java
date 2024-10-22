@@ -32,12 +32,12 @@ public class TelaAlteracao extends JFrame{
         
         setLocationRelativeTo(null);
         setResizable(false);
-        setTitle("Senac - Alteração");
+        setTitle("Herói - Alteração");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(500, 200, 426, 212);
         
         tela = new JPanel();
-        tela.setBackground(SystemColor.gray);
+        tela.setBackground(SystemColor.red );
         setContentPane(tela);
         tela.setLayout(null);
         
@@ -149,7 +149,7 @@ public class TelaAlteracao extends JFrame{
                                     usu.getUsuario(),
                                     usu.getSenha());
                     
-                    if (atualizacaoValida == true){
+                    if (atualizacaoValida == false){
                         //Usuario cadastrado na base de dados
                         JOptionPane.showMessageDialog(null,
                                 "Dado(s) do usuário alterado(s) retornaremos "

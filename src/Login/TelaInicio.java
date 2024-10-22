@@ -20,13 +20,13 @@ public class TelaInicio extends JFrame{
             
             setLocationRelativeTo(null);
             setResizable(false);
-            setTitle("Menu - Senac");
+            setTitle("Menu - Marvel");
             
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setBounds(500, 200, 426, 212);
             
             tela = new JPanel();
-            tela.setBackground(SystemColor.gray);
+            tela.setBackground(SystemColor.red);
             setContentPane(tela);
             tela.setLayout(null);
             

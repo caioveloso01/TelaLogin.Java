@@ -1,6 +1,11 @@
 package Login;
 
 
+
+
+
+
+
 import java.awt.Font; //Trabalhar com fontes
 import java.awt.HeadlessException;
 import java.awt.SystemColor; //Trabalhar com cores
@@ -38,7 +43,7 @@ public class TelaCadastro extends JFrame {
         setBounds(500, 200, 426, 230);
         
         tela = new JPanel();
-        tela.setBackground(SystemColor.gray);
+        tela.setBackground(SystemColor.red);
         setContentPane(tela);
         tela.setLayout(null);
         
@@ -91,72 +96,80 @@ public class TelaCadastro extends JFrame {
         tela.add(btnCancelar);
     
    
-    //Ação do botão cadastrar usuário na base de dados
-    btnCadastrar.addActionListener((ActionEvent e) -> {
-    try {
-        // Instancio o objeto Usuario
-        Usuario usu = new Usuario();
+    
+        //Ação do botão cadastrar usuário na base de dados
+        btnCadastrar.addActionListener((ActionEvent e) -> {
+            try {
+                // Instancio o objeto Usuario
+                Usuario usu = new Usuario();
 
-        // Realizando os setters dos dados de tela
-        usu.setNome(txtNome.getText());
-        usu.setUsuario(txtUsuario.getText());
-        usu.setSenha(passSenha.getText());
+                // Realizando os setters dos dados de tela
+                usu.setNome(txtNome.getText());
+                usu.setUsuario(txtUsuario.getText());
+                usu.setSenha(passSenha.getText());
 
-        // Validações de preenchimento dos dados
-        if ("".equals(usu.getNome())) {
-            mensagemJOption = "Campo nome do usuário precisa ser informado!";
-            mensagemTipo = 0;
-        } else if ("".equals(usu.getUsuario())) {
-            mensagemJOption = "Campo usuário precisa ser informado!";
-            mensagemTipo = 0;
-        } else if ("".equals(usu.getSenha())) {
-            mensagemJOption = "Campo senha precisa ser informado!";
-            mensagemTipo = 0;
-        } else if(!usu.getSenha().equals(passConfSenha.getText())){
-            mensagemJOption = "Campos senha e confirmação de senha não coincidem!";
-            mensagemTipo = 0;
-        }else{
-            // Verifico se somente o usuário consta no banco,
-            // neste caso, faremos uma sobrecarga de método
-            usuarioValido = usu.verificaUsuario(usu.getUsuario());
-
-            if (usuarioValido) {
-                // Caso exista, não pode ser colocado na base
-                mensagemJOption = "Usuário já existente na base de dados";
-                mensagemTipo = 0;
-            } else {
-                cadastroValido = usu.cadastraUsuario(usu.getNome(),
-                                                     usu.getUsuario(),
-                                                     usu.getSenha());
-                if (cadastroValido) {
-                    // Usuário cadastrado na base de dados
-                    mensagemJOption = "Usuário cadastrado corretamente!";
-                    mensagemTipo = 1;
-                } else {
-                    // Algum erro aconteceu
-                    mensagemJOption = "Problemas ao inserir o usuário!";
+                // Validações de preenchimento dos dados
+                if ("".equals(usu.getNome())) {
+                    mensagemJOption = "Campo nome do usuário precisa ser informado!";
                     mensagemTipo = 0;
+                }else if ("".equals(usu.getUsuario())) {
+                    mensagemJOption = "Campo usuário precisa ser informado!";
+                }else if ("".equals(usu.getSenha())) {
+                    mensagemJOption = "Campo senha precisa ser informado!";
+                    mensagemTipo = 0;
+                }else if(!usu.getSenha().equals(passConfSenha.getText())){
+                    mensagemJOption = "Campos senha e confirmação de senha não coincidem!";
+                    mensagemTipo = 0;
+                }else{
+                    // Verifico se somente o usuário consta no banco,
+                    // neste caso, faremos uma sobrecarga de método
+                    usuarioValido = usu.verificaUsuario(usu.getUsuario());
+
+                    if (usuarioValido == true) {
+                        // Caso exista, não pode ser colocado na base
+                        mensagemJOption = "Usuário já existente na base de dados";
+                        mensagemTipo = 0;
+                    }else{
+                        cadastroValido = usu.cadastraUsuario(usu.getNome(),
+                                                            usu.getUsuario(),
+                                                            usu.getSenha());
+                        
+                        if (cadastroValido == true){
+                            // Usuário cadastrado na base de dados
+                            mensagemJOption = "Herói cadastrado corretamente!";
+                            mensagemTipo = 1;
+                        
+                        }else{
+                            // Algum erro aconteceu
+                            mensagemJOption = "Problemas ao inserir o usuário!";
+                            mensagemTipo = 0;
+                        }
+                    }
                 }
+        
+                //Mostrar a mensagem referida
+                JOptionPane.showMessageDialog(null,
+                        mensagemJOption, "Atenção", mensagemTipo );
+                if (mensagemTipo == 1){
+                    //Voltamos para a tela de login
+                    TelaLogin tLogin = new TelaLogin();
+                    tLogin.abreTela();
+            
+                    //Fecho a tela de cadastro
+                    dispose();
+                }
+            }catch (HeadlessException ec) {
+                System.out.println("Erro no cadastro do usuário "
+                        + ec.getMessage());
             }
-        }
-        //Mostrar a mensagem referida
-        JOptionPane.showMessageDialog(null,
-                mensagemJOption, "Atenção", mensagemTipo );
-        if (mensagemTipo == 1){
-            //Voltamos para a tela de login
+        });
+    
+        btnCancelar.addActionListener((ActionEvent e) -> {
             TelaLogin tLogin = new TelaLogin();
             tLogin.abreTela();
-            
-            //Fecho a tela de cadastro
             dispose();
-        }
-    }catch (HeadlessException ec) {
-        System.out.println("Erro no cadastro do usuário "
-                + ec.getMessage());
-        }
-    });
-   }
-    
+        });
+    }     
    public void abreTela(){
        TelaCadastro panelCadastro = new TelaCadastro();
        panelCadastro.setVisible(true);

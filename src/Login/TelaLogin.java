@@ -16,8 +16,9 @@ import javax.swing.JOptionPane; //Trabalhar com mensagens
 import javax.swing.JPanel;//Trabalhar com paineis
 import javax.swing.JPasswordField;//Trabalhar com campos de senha
 import javax.swing.JTextField;//Trabalhar com campos de texto
+import javax.swing.ImageIcon;
 
-public final class TelaLogin extends JFrame{
+public class TelaLogin extends JFrame{
     
     //tela Objeto JPanel (tela em si)
     private final JPanel panelTela;
@@ -40,7 +41,7 @@ public final class TelaLogin extends JFrame{
         setResizable(false);
         
         //coloca titulo na caixa JFrame
-        setTitle("Login - Senac");
+        setTitle("Login - Marvel");
         
         //Quando clicado no X eu encerro todo o programa
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,18 +54,23 @@ public final class TelaLogin extends JFrame{
         panelTela = new JPanel ();
         
         //Define a cor de fundo do JPanel (tela)
-        panelTela.setBackground(SystemColor.gray);
+        panelTela.setBackground(SystemColor.red);
         setContentPane(panelTela);
         
         //Vou utilizar o meu panel sem utilizar o padrão
         panelTela.setLayout (null);
         
         //Adicionando elementos na tela:
-        //Criando um objeto do tipo JLabel e atribuindo o valor ao atributo
-        JLabel lblIdentificacao = new JLabel("IDENTIFICAÇÃO");
+        // Caminho relativo da imagem no projeto
+        ImageIcon logoMarvel = new ImageIcon(getClass().getResource("/images/marvel-logo.png"));
+        
+        
+
+        // Substitua o JLabel que exibe texto pelo logo
+        JLabel lblIdentificacao = new JLabel(logoMarvel);
         
         //Localização na tela
-        lblIdentificacao.setBounds (144, 0, 160, 39);
+        lblIdentificacao.setBounds(120, 10, 160, 39); // Ajuste conforme necessário para centralizar
         
         //Definindo a Fonte
         lblIdentificacao.setFont(new Font("Arial", 3, 19));
